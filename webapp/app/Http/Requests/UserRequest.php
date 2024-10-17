@@ -27,7 +27,7 @@ class UserRequest extends FormRequest
             'email' => 'required|max255',
             'password' => 'required|max225',
             'remember_token' => 'nullable|max100',
-            'profile_img' => 'nullable|max225'
+            'profile_img' => 'nullable|max225',
         ];
     }
 }

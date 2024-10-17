@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -12,34 +11,53 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'email',
         'password',
+        'email_verified_at',
+        'remember_token',
+        'profile_img'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class, 'user_id');
+    }
+
+    public static function storeUser($request)
+    {
+        return self::create([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'email_verified_at' => $request->input('email_verified_at'),
+            'password' => bcrypt($request->input('password')),
+            'remember_token' => $request->input('remember_token'),
+            'profile_img' => $request->input('profile_img')
+        ]);
+    }
+
+    public static function updateUser($request, $id)
+    {
+        $user = self::findOrFail($id);
+        $user->fill($request->all());
+        $user->save();
+        return $user;
+    }
+
+    public static function deleteUser($id)
+    {
+        $user = self::findOrFail($id);
+        return $user->delete();
+    }
 }

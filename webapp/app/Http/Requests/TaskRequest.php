@@ -26,7 +26,7 @@ class TaskRequest extends FormRequest
             'user_id' => 'required|max20',
             'task_status' => 'required|max4',
             'title' => 'required|max255',
-            'comment' => 'nullable|max1000'
+            'comment' => 'nullable|max1000',
 
         ];
     }
