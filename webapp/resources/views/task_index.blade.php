@@ -1,70 +1,85 @@
 @extends('layouts.app')
+
 @section('content')
-<!DOCTYPE html>
-<html lang="ja">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Todoリスト</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-</head>
-
-<body>
-    <div class="container mt-3">
-        <h1>タスク一覧</h1>
+<div class="container mt-3 text-center">
+    <!-- ユーザー情報 -->
+    <div class="mb-4">
+        <img src="{{ Auth::user()->avatar_url ?? 'default.png' }}" class="rounded-circle" style="width: 40px;">
+        <span>{{ Auth::user()->name }}</span>
     </div>
-    <div class="container mt-3">
-        <div class="container mb-4">
 
-            {{ csrf_field() }}
-            <div class="row">
-                {{ Form::text('newTodo', null, ['class' => 'form-control col-8 mr-5']) }}
-                {{ Form::date('newDeadline', null, ['class' => 'mr-5']) }}
-                {{ Form::submit('新規追加', ['class' => 'btn btn-primary']) }}
-            </div>
-            {!! Form::close() !!}
+    <!-- 検索フォーム -->
+    <form action="{{ route('tasks.index') }}" method="GET" class="mb-4">
+        <div class="d-flex gap-3 align-items-center">
+            <!-- フリーワード検索 -->
+            <input type="text" name="search" class="form-control" style="width: 200px;" placeholder="検索">
+
+            <!-- 担当者選択 -->
+            <select name="assignee" class="form-control" style="width: 200px;">
+                <option value="">担当者（全員）</option>
+                <option value="self">自分</option>
+                @foreach($users as $user)
+                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                @endforeach
+            </select>
+
+            <!-- ステータス選択 -->
+            <select name="status" class="form-control" style="width: 200px;">
+                <option value="">全てのステータス</option>
+                <option value="0">未着手</option>
+                <option value="1">着手中</option>
+                <option value="2">保留</option>
+                <option value="3">完了</option>
+            </select>
+
+            <!-- 検索ボタン -->
+            <button type="submit" class="btn btn-primary" style="width: 100px;">検索</button>
         </div>
+    </form>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col" style="width: 30%">ID</th>
-                    <th scope="col" style="width: 30%">タスク名</th>
-                    <th scope="col" style="width: 30%">担当者</th>
-                    <th scope="col" style="width: 30%">ステータス</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th scope="row">number</th>
-                    <th scope="row">taskname</th>
-                    <th scope="row">name</th>
-                    <th scope="row">ステータス</th>
-                    <td><a href="" class="btn btn-primary">編集</a></td>
-                    <td>{{ Form::submit('削除', ['class' => 'btn btn-danger']) }}</td>
-                </tr>
-                <tr>
-                    <th scope="row"></th>
-                    <th scope="row"></th>
-                    <th scope="row"></th>
-                    <th scope="row"></th>
-                    <td><a href="" class="btn btn-primary">編集</a></td>
-                    <td>{{ Form::submit('削除', ['class' => 'btn btn-danger']) }}</td>
-                </tr>
-                <tr>
-                    <th scope="row"></th>
-                    <th scope="row"></th>
-                    <th scope="row"></th>
-                    <th scope="row"></th>
-                    <td><a href="" class="btn btn-primary">編集</a></td>
-                    <td>{{ Form::submit('削除', ['class' => 'btn btn-danger']) }}</td>
-                </tr>
-            </tbody>
-        </table>
+    <!-- タスク一覧 -->
+    <div class="card">
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>タスク名</th>
+                        <th>担当者</th>
+                        <th>ステータス</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($tasks as $task)
+                    <tr>
+                        <td>{{ $task->id }}</td>
+                        <td>{{ $task->title }}</td>
+                        <td>{{ $task->user->name }}</td>
+                        <td>
+                            @switch($task->task_status)
+                            @case(0) 未着手 @break
+                            @case(1) 着手中 @break
+                            @case(2) 保留 @break
+                            @case(3) 完了 @break
+                            @endswitch
+                        </td>
+                        <td>
+                            <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-sm btn-primary">編集</a>
+                            <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display:inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger"
+                                    onclick="return confirm('削除してよろしいですか？')">削除</button>
+                            </form>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
-</body>
 
-</html>
+    {{ $tasks->links() }}
+</div>
 @endsection
