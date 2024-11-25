@@ -50,25 +50,13 @@ class TaskController extends Controller
         return view('task_create', compact('users'));
     }
 
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        // バリデーション
-        $request->validate([
-            'name' => 'required|max:255',
-            'user_id' => 'required|exists:users,id',
-            'status' => 'required|in:0,1,2,3',
-            'note' => 'nullable|max:1000',
-        ], [
-            'name.required' => 'タスク名は必須です',
-            'user_id.required' => '担当者は必須です',
-            'status.required' => 'ステータスは必須です',
-        ]);
 
-        // タスクの作成
         Task::create([
             'title' => $request->name,
             'user_id' => $request->user_id === 'self' ? auth()->id() : $request->user_id,
-            'task_status' => (int)$request->status, // 数値として保存
+            'task_status' => (int)$request->status,
             'comment' => $request->note,
         ]);
 

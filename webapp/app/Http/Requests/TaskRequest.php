@@ -24,10 +24,19 @@ class TaskRequest extends FormRequest
         return [
             'id' => 'required|max20',
             'user_id' => 'required|max20',
-            'task_status' => 'required|max4',
+            'task_status' => 'required|in:0,1,2,3',
             'title' => 'required|max255',
             'comment' => 'nullable|max1000',
 
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'name.required' => 'タスク名は必須です',
+            'user_id.required' => '担当者は必須です',
+            'status.required' => 'ステータスは必須です',
         ];
     }
 }

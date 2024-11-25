@@ -30,4 +30,14 @@ class UserRequest extends FormRequest
             'profile_img' => 'nullable|max225',
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'name.required' => 'ユーザー名は必須です',
+            'email.required' => 'メールアドレスは必須です',
+            'email.email' => '有効なメールアドレスを入力してください',
+            'profile_image.image' => '画像ファイルを選択してください'
+        ];
+    }
 }
