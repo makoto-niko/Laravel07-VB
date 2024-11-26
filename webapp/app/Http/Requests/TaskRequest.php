@@ -24,7 +24,7 @@ class TaskRequest extends FormRequest
         return [
             'id' => 'required|max20',
             'user_id' => 'required|max20',
-            'task_status' => 'required|max4',
+            'task_status' => 'required|in:0,1,2,3',
             'title' => 'required|max255',
             'comment' => 'nullable|max1000',
 

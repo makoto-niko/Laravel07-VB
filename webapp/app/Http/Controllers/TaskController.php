@@ -51,14 +51,13 @@ class TaskController extends Controller
         return view('task_create', compact('users'));
     }
 
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
 
-        // タスクの作成
         Task::create([
             'title' => $request->name,
             'user_id' => $request->user_id === 'self' ? auth()->id() : $request->user_id,
-            'task_status' => (int)$request->status, // 数値として保存
+            'task_status' => (int)$request->status,
             'comment' => $request->note,
         ]);
 
