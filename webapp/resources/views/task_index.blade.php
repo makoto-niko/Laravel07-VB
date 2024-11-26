@@ -17,7 +17,6 @@
             <!-- 担当者選択 -->
             <select name="assignee" class="form-control" style="width: 200px;">
                 <option value="">担当者（全員）</option>
-                <option value="self">自分</option>
                 @foreach($users as $user)
                 <option value="{{ $user->id }}">{{ $user->name }}</option>
                 @endforeach
@@ -65,7 +64,7 @@
                             @endswitch
                         </td>
                         <td>
-                            <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-sm btn-primary">編集</a>
+                            <a href="{{ route('tasks.edit', $task) }}" class="btn btn-sm btn-primary">編集</a>
                             <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display:inline">
                                 @csrf
                                 @method('DELETE')

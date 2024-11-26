@@ -30,4 +30,13 @@ class TaskRequest extends FormRequest
 
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'name.required' => 'タスク名は必須です',
+            'user_id.required' => '担当者は必須です',
+            'status.required' => 'ステータスは必須です',
+        ];
+    }
 }

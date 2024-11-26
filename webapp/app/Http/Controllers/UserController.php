@@ -2,63 +2,37 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\UserRequest;
+use Illuminate\Support\Facades\Storage;
+use App\Models\User;
 
-class TestUserController extends Controller
+class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function edit()
     {
-        //
+        $user = auth()->user();
+        return view('user_edit', compact('user'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function update(UserRequest $request)
     {
-        //
-    }
+        $user = auth()->user();
+        $validated = $request->validated();
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        if ($request->hasFile('profile_img')) {
+            // 古い画像を削除
+            if ($user->profile_img && Storage::exists('public/profile_img/' . $user->profile_img)) {
+                Storage::delete('public/profile_img/' . $user->profile_img);
+            }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+            // 新しい画像を保存
+            $filename = time() . '.' . $request->profile_img->extension();
+            $request->profile_img->storeAs('public/profile_img', $filename);
+            $validated['profile_img'] = $filename;
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        $user->update($validated);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
+        return redirect()->route('tasks.index')->with('success', 'プロフィールを更新しました');
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
-}
+};

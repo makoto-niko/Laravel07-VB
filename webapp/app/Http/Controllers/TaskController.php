@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\TaskRequest;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -52,17 +53,6 @@ class TaskController extends Controller
 
     public function store(Request $request)
     {
-        // バリデーション
-        $request->validate([
-            'name' => 'required|max:255',
-            'user_id' => 'required|exists:users,id',
-            'status' => 'required|in:0,1,2,3',
-            'note' => 'nullable|max:1000',
-        ], [
-            'name.required' => 'タスク名は必須です',
-            'user_id.required' => '担当者は必須です',
-            'status.required' => 'ステータスは必須です',
-        ]);
 
         // タスクの作成
         Task::create([
@@ -75,11 +65,32 @@ class TaskController extends Controller
         return redirect()->route('tasks.index')->with('success', 'タスクを作成しました');
     }
 
-    public function show($id) {}
 
-    public function edit($id) {}
+    public function edit(Task $task)
+    {
 
-    public function update(Request $request, $id) {}
+        $users = User::all(); //必要なユーザーのリストを取得
+        return view('task_edit', compact('task', 'users'));
+    }
 
-    public function destroy($id) {}
+    public function update(Request $request, Task $task)
+    {
+
+        // タスクの更新
+        $task->update([
+            'title' => $request->name,
+            'user_id' => $request->user_id === 'self' ? auth()->id() : $request->user_id,
+            'task_status' => (int)$request->status,
+            'comment' => $request->note,
+        ]);
+
+        return redirect()->route('tasks.index')->with('success', 'タスクを更新しました');
+    }
+
+    public function destroy(Task $task)
+    {
+        $task->delete();
+
+        return redirect()->route('tasks.index')->with('success', 'タスクを削除しました');
+    }
 }
