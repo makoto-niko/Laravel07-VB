@@ -46,23 +46,23 @@
                         </div>
 
                         <!-- メールアドレス -->
-                        <div class="mb-3">
-                            <label for="email" class="form-label">メールアドレス *</label>
-                            <input type="email" class="form-control" id="email" name="email"
-                                value="{{ old('email', $user->email) }}" required>
-                            @error('email')
-                            <span class="text-danger">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <!-- 登録ボタン -->
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-primary">更新する</button>
-                        </div>
-                    </form>
+                        <div class="mb-3"></div>
+                        <label for="email" class="form-label">メールアドレス *</label>
+                        <input type="email" class="form-control" id="email" name="email"
+                            value="{{ old('email', $user->email) }}" required>
+                        @error('email')
+                        <span class="text-danger">{{ $message }}</span>
+                        @enderror
                 </div>
+
+                <!-- 登録ボタン -->
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">更新する</button>
+                </div>
+                </form>
             </div>
         </div>
     </div>
+</div>
 </div>
 @endsection
