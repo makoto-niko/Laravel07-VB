@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\TaskRequest;
+use App\Http\Requests\TaskRequest;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -51,9 +50,9 @@ class TaskController extends Controller
         return view('task_create', compact('users'));
     }
 
-    public function store(StoreRequest $request)
+    public function store(TaskRequest $request)
     {
-
+        $validatedDate = $request->validated();
         Task::create([
             'title' => $request->name,
             'user_id' => $request->user_id === 'self' ? auth()->id() : $request->user_id,
@@ -72,9 +71,9 @@ class TaskController extends Controller
         return view('task_edit', compact('task', 'users'));
     }
 
-    public function update(Request $request, Task $task)
+    public function update(TaskRequest $request, Task $task)
     {
-
+        $validatedDate = $request->validated();
         // タスクの更新
         $task->update([
             'title' => $request->name,
