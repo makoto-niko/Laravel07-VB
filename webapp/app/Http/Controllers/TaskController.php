@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Http\Requests\TaskRequest;
 use App\Models\Task;
 use App\Models\User;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class TaskController extends Controller
 {
 
-    public function index(Request $request)
+    public function index(TaskRequest $request)
     {
         // クエリビルダーの初期化
         $query = Task::with('user');
@@ -52,13 +53,14 @@ class TaskController extends Controller
 
     public function store(TaskRequest $request)
     {
-        $validatedDate = $request->validated();
+        $validated = $request->validated();
         Task::create([
-            'title' => $request->name,
-            'user_id' => $request->user_id === 'self' ? auth()->id() : $request->user_id,
-            'task_status' => (int)$request->status,
-            'comment' => $request->note,
+            'title' => $validated['title'],
+            'user_id' => $validated['user_id'],
+            'task_status' => (int)$validated['task_status'],
+            'comment' => $validated['note'] ?? null,
         ]);
+
 
         return redirect()->route('tasks.index')->with('success', 'タスクを作成しました');
     }
@@ -76,9 +78,9 @@ class TaskController extends Controller
         $validatedDate = $request->validated();
         // タスクの更新
         $task->update([
-            'title' => $request->name,
+            'title' => $request->title,
             'user_id' => $request->user_id === 'self' ? auth()->id() : $request->user_id,
-            'task_status' => (int)$request->status,
+            'task_status' => (int)$request->task_status,
             'comment' => $request->note,
         ]);
 

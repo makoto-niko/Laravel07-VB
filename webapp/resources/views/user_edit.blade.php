@@ -26,7 +26,7 @@
 
                         <!-- 画像アップロード -->
                         <div class="mb-3">
-                            <label for="profile_image" class="form-label">プロフィール画像</label><!--画像が反映されない-->
+                            <label for="profile_image" class="form-label">プロフィール画像</label>
                             <input type="file" class="form-control" id="profile_img" name="profile_img">
                             @error('profile_img')
                             <span class="text-danger">{{ $message }}</span>
@@ -41,7 +41,7 @@
                             @error('name')
                             <span class="text-danger">{{ $message }}</span>
                             @enderror
-                        </div>S
+                        </div>
 
                         <!-- メールアドレス -->
                         <div class="mb-3">

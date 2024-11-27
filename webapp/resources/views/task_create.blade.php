@@ -29,13 +29,13 @@
                     @csrf
 
                     <!-- タスク名 -->
-                    <div class="form-group mb-3"> <!-- マージンボトムを追加 -->
-                        <label for="name">タスク名 <span class="text-danger">*</span></label>
+                    <div class="form-group mb-3">
+                        <label for="title">タスク名 <span class="text-danger">*</span></label>
                         <input type="text"
-                            class="form-control @error('name') is-invalid @enderror"
-                            id="name"
-                            name="name"
-                            value="{{ old('name') }}"
+                            class="form-control @error('title') is-invalid @enderror"
+                            id="title"
+                            name="title"
+                            value="{{ old('title') }}"
                             required>
                     </div>
 
@@ -56,23 +56,22 @@
 
                     <!-- ステータス -->
                     <div class="form-group mb-3">
-                        <label for="status">ステータス</label>
-                        <select name="status" class="form-control" id="status">
-                            <option value="">全てのステータス</option>
-                            <option value="0" {{ request('status') == '0' ? 'selected' : '' }}>未着手</option>
-                            <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>着手中</option>
-                            <option value="2" {{ request('status') == '2' ? 'selected' : '' }}>保留</option>
-                            <option value="3" {{ request('status') == '3' ? 'selected' : '' }}>完了</option>
+                        <label for="task_status">ステータス <span class="text-danger">*</span></label>
+                        <select name="task_status" class="form-control @error('task_status') is-invalid @enderror" id="task_status" required>
+                            <option value="0" {{ old('task_status', '0') == '0' ? 'selected' : '' }}>未着手</option>
+                            <option value="1" {{ old('task_status') == '1' ? 'selected' : '' }}>着手中</option>
+                            <option value="2" {{ old('task_status') == '2' ? 'selected' : '' }}>保留</option>
+                            <option value="3" {{ old('task_status') == '3' ? 'selected' : '' }}>完了</option>
                         </select>
                     </div>
 
                     <!-- 備考 -->
                     <div class="form-group mb-4">
-                        <label for="note">備考</label>
-                        <textarea class="form-control @error('note') is-invalid @enderror"
-                            id="note"
-                            name="note"
-                            rows="3">{{ old('note') }}</textarea>
+                        <label for="comment">備考</label>
+                        <textarea class="form-control @error('comment') is-invalid @enderror"
+                            id="comment"
+                            name="comment"
+                            rows="3">{{ old('comment') }}</textarea>
                     </div>
 
                     <!-- 登録ボタン -->
