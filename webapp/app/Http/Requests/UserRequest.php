@@ -31,7 +31,7 @@ class UserRequest extends FormRequest
                 'max:255',
                 Rule::unique('users')->ignore(auth()->id())  // ユニーク制約を追加
             ],
-            'profile_img' => 'nullable|max:255',
+            'profile_img' => 'required|image|mimes:jpeg,png,jpg|max:255',
         ];
     }
 

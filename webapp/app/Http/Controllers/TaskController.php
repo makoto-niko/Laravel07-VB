@@ -51,15 +51,17 @@ class TaskController extends Controller
         return view('task_create', compact('users'));
     }
 
-    public function store(TaskRequest $request)
+    public function store(TaskRequest $request, Task $task)
     {
         $validated = $request->validated();
-        Task::create([
-            'title' => $validated['title'],
+
+        $task = Task::create([
             'user_id' => $validated['user_id'],
-            'task_status' => (int)$validated['task_status'],
-            'comment' => $validated['note'] ?? null,
+            'task_status' => $validated['task_status'],
+            'title' => $validated['title'],
+            'comment' => $validated['comment'] ?? null,
         ]);
+
 
 
         return redirect()->route('tasks.index')->with('success', 'タスクを作成しました');

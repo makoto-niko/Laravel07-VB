@@ -23,11 +23,10 @@ class TaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => 'required|max:20',
-            'task_status' => 'required|in:0,1,2,3',
-            'title' => 'required|max:255',
-            'comment' => 'nullable|max:1000',
-
+            'user_id' => 'required|exists:users,id',
+            'task_status' => 'required|integer|in:0,1,2,3',
+            'title' => 'required|string|max:255',
+            'comment' => 'nullable|string|max:1000',
         ];
     }
 

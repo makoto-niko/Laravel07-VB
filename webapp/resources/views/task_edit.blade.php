@@ -31,24 +31,20 @@
                     <div class="form-group mb-3"> <!-- マージンボトムを追加 -->
                         <label for="name">タスク名 <span class="text-danger">*</span></label>
                         <input type="text"
-                            class="form-control @error('name') is-invalid @enderror"
+                            class="form-control @error('title') is-invalid @enderror"
                             id="name"
-                            name="name"
-                            value="{{ old('name') }}"
+                            name="title"
+                            value="{{ old('title') }}"
                             required>
                     </div>
 
                     <!-- 担当者 -->
                     <div class="form-group mb-3">
                         <label for="user_id">担当者 <span class="text-danger">*</span></label>
-                        <select class="form-control @error('user_id') is-invalid @enderror"
-                            id="user_id"
-                            name="user_id"
-                            required>
+                        <select name="user_id" class="form-control">
+                            <option value="">担当者を選択</option>
                             @foreach($users as $user)
-                            <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
-                                {{ $user->name }}
-                            </option>
+                            <option value="{{ $user->id }}">{{ $user->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -56,21 +52,21 @@
                     <!-- ステータス -->
                     <div class="form-group mb-3">
                         <label for="status">ステータス</label>
-                        <select name="status" class="form-control" id="status">
-                            <option value="">全てのステータス</option>
-                            <option value="0" {{ request('status') == '0' ? 'selected' : '' }}>未着手</option>
-                            <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>着手中</option>
-                            <option value="2" {{ request('status') == '2' ? 'selected' : '' }}>保留</option>
-                            <option value="3" {{ request('status') == '3' ? 'selected' : '' }}>完了</option>
+                        <select name="task_status" class="form-control">
+                            <option value="">ステータスを選択</option>
+                            <option value="0">未着手</option>
+                            <option value="1">着手中</option>
+                            <option value="2">保留</option>
+                            <option value="3">完了</option>
                         </select>
                     </div>
 
                     <!-- 備考 -->
                     <div class="form-group mb-4">
                         <label for="note">備考</label>
-                        <textarea class="form-control @error('note') is-invalid @enderror"
+                        <textarea class="form-control @error('comment') is-invalid @enderror"
                             id="note"
-                            name="note"
+                            name="comment"
                             rows="3">{{ old('note') }}</textarea>
                     </div>
 
